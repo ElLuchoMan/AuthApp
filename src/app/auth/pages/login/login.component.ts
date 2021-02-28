@@ -20,6 +20,9 @@ export class LoginComponent {
   ngOnInit(): void {
   }
   login() {
+    // this.authServive.validarToken().subscribe(resp=>{
+    //   console.log(resp);
+    // });
     console.log(this.miFormulario.value)
     const { email, password } = this.miFormulario.value;
     this.authServive.login(email, password).subscribe(ok => {
