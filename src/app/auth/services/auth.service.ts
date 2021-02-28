@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthResponse, Usuario } from '../interfaces/interfaces';
-import { map } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,15 @@ export class AuthService {
     const url = `${this.baseUrl}/auth`;
     const body = { email, password };
     return this.http.post<AuthResponse>(url, body).pipe(
-      map(resp=>resp.ok)
-    )
+      tap(resp => {
+        if (resp.ok) {
+          this._usuario = {
+            name: resp.name!,
+            uid: resp.uid!,
+          }
+        }
+      }),
+      map(resp => resp.ok), catchError(err => of(err.error.msg))
+    );
   }
 }

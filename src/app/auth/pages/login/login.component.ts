@@ -21,9 +21,13 @@ export class LoginComponent {
   login() {
     console.log(this.miFormulario.value)
     const { email, password } = this.miFormulario.value;
-    this.authServive.login(email, password).subscribe(resp => {
-      console.log(resp);
+    this.authServive.login(email, password).subscribe(ok => {
+      // console.log(valido);
+      if (ok===true){
+        this.router.navigateByUrl('/dashboard');
+      }else {
+        //TODO: error
+      }
     });
-    // this.router.navigateByUrl('/dashboard');
   }
 }
